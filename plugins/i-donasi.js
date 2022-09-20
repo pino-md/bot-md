@@ -1,19 +1,54 @@
-let handler = async (m, { conn, usedPrefix }) => conn.sendButton(m.chat, `
-╭─「 Donasi • Dana 」
-│ • Tri [0895336282144]
-│ • Gopay  [0895336282144]
-│ • Dana  [0895336282144]
-│ • Saweria  [https://saweria.co/thesadboy01]
-╰────
-╭─「 *NOTE* 」
-│ > Ingin donasi? Wa.me/62895336282144
-│ _Hasil donasi akan digunakan buat sewa_
-│ _atau beli *RDP/VPS* agar bot bisa jalan_
-│ _24jam tanpa kendala_
-╰────
-`.trim(), wm, 'Menu', usedPrefix + 'menu', m) // Tambah sendiri kalo mau
+const { default: makeWASocket, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, downloadContentFromMessage, downloadHistory, proto, getMessage, generateWAMessageContent, prepareWAMessageMedia } = require('@adiwajshing/baileys')
+let handler = async (m) => {
+let sewa = `*────── 「 DONASI 」 ──────*
+Hai kak 👋
+Kalian bisa mendukung saya agar bot ini tetap up to date dengan cara donasi
+Berapapun donasi kalian akan sangat berarti 😁
+Thanks!
+┏━━━•❅•°•❈〔 𝗱𝗼𝗻𝗮𝘀𝗶 〕
+┣➲ Scan Barcod Qrisnya diatas🤗
+┗━━━•❅•°•❈
+Contact person Owner:
+wa.me/628895377665 (Owner)`
+let message = await prepareWAMessageMedia({ image: {url: 'https://c.top4top.io/p_2433m1yc00.jpg' }}, { upload: conn.waUploadToServer })
+     const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+     templateMessage: {
+         hydratedTemplate: {
+           imageMessage: message.imageMessage,
+           hydratedContentText: sewa,
+           hydratedFooterText: wm,
+           hydratedButtons: [{
+             urlButton: {
+               displayText: '🏧 Group Bot',
+               url: 'https://chat.whatsapp.com/CnxVBXsAxSS4XNCQecdVrM'
+             }
+
+           },
+               {
+             callButton: {
+               displayText: '',
+               phoneNumber: '+62 889-5377-665'
+             }
+           },           
+               {
+             quickReplyButton: {
+               displayText: '🧒 Owner',
+               id: '.owner',
+             }
+
+           }]
+         }
+       }
+     }), { userJid: m.sender, quoted: m });
+    return await conn.relayMessage(
+         m.chat,
+         template.message,
+         { messageId: template.key.id }
+     )
+}
+
 handler.help = ['donasi']
 handler.tags = ['about']
-handler.command = /^dona(te|si)$/i
+handler.command = /^donasi$/i
 
 module.exports = handler
